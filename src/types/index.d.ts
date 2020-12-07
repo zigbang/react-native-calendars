@@ -344,6 +344,8 @@ export interface CalendarListBaseProps extends CalendarBaseProps {
      * Initially selected day
      */
     selected?: string;
+
+    calendarStyle?: StyleProp<ViewStyle>;
 }
 
 export class CalendarList extends React.Component<CalendarMarkingProps & CalendarListBaseProps> { }
