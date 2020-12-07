@@ -1,7 +1,8 @@
 {
-  "name": "react-native-calendars",
-  "version": "1.22.0",
+  "name": "@zigbang/react-native-calendars",
+  "version": "1.403.6",
   "main": "src/index.js",
+  "types": "src/types/index.d.ts",
   "description": "React Native Calendar Components",
   "scripts": {
     "build": "xcodebuild -project ios/CalendarsExample.xcodeproj build",
@@ -18,12 +19,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wix/react-native-calendars"
+    "url": "git+https://github.com/zigbang/react-native-calendars"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://npm.zigbang.io/"
   },
-  "author": "Wix.com",
+  "author": "zigbang",
   "license": "MIT",
   "dependencies": {
     "lodash": "^4.17.15",
