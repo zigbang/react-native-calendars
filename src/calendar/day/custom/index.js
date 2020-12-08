@@ -17,7 +17,7 @@ class Day extends Component {
     onPress: PropTypes.func,
     onLongPress: PropTypes.func,
     date: PropTypes.object,
-    markedDates: PropTypes.object,
+    markedDates: PropTypes.object
   };
 
   constructor(props) {
@@ -47,7 +47,7 @@ class Day extends Component {
     let marking = this.props.marking || {};
     if (marking && marking.constructor === Array && marking.length) {
       marking = {
-        marking: true,
+        marking: true
       };
     }
 
@@ -81,8 +81,8 @@ class Day extends Component {
         <TouchableOpacity
           testID={this.props.testID}
           style={containerStyle}
-          onPress={isDisabled ? () => {} : this.onDayPress}
-          onLongPress={isDisabled ? () => {} : this.onDayLongPress}
+          onPress={isDisabled ? (marking.selected ? this.onDayPress : () => {}) : this.onDayPress}
+          onLongPress={isDisabled ? (marking.selected ? this.onDayLongPress : () => {}) : this.onDayLongPress}
           activeOpacity={marking.activeOpacity}
           disabled={marking.disableTouchEvent}
           accessibilityRole={isDisabled ? undefined : 'button'}
