@@ -223,14 +223,12 @@ class Calendar extends Component {
     const {theme} = this.props;
     let backgroundColor = 'transparent';
     if (theme['stylesheet.calendar.expandable-background-color'] && marking.selected) {
-      if (!marking.startingDay && !marking.endingDay) {
-        backgroundColor = theme['stylesheet.calendar.expandable-background-color'];
-      }
+      backgroundColor = theme['stylesheet.calendar.expandable-background-color'];
     }
 
     return (
       <View style={{flex: 1, alignItems: 'center', backgroundColor}} key={id} onLayout={this.handleDayLayout}>
-        {(marking.startingDay || marking.endingDay) && (
+        {!marking.disabled && (marking.startingDay || marking.endingDay) && (
           <View
             style={{
               position: 'absolute',
