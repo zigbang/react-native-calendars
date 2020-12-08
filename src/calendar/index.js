@@ -98,7 +98,8 @@ class Calendar extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const boundUpdater = shouldComponentUpdate.bind(this);
-    return boundUpdater(nextProps, nextState) || this.state.dayWidth !== nextState.dayWidth;
+    const shouldUpdate = boundUpdater(nextProps, nextState) || this.state.dayWidth !== nextState.dayWidth;
+    return shouldUpdate;
   }
 
   handleDayLayout = e => {
@@ -305,7 +306,12 @@ class Calendar extends Component {
     const marking = this.getDateMarking(day);
     const {theme} = this.props;
     let backgroundColor = 'transparent';
-    if (theme['stylesheet.calendar.expandable-background-color'] && marking.selected) {
+    if (
+      theme['stylesheet.calendar.expandable-background-color'] &&
+      marking.selected &&
+      !marking.startingDay &&
+      !marking.endingDay
+    ) {
       backgroundColor = theme['stylesheet.calendar.expandable-background-color'];
     }
 
