@@ -27,9 +27,6 @@ class Day extends Component {
 
     this.onDayPress = this.onDayPress.bind(this);
     this.onDayLongPress = this.onDayLongPress.bind(this);
-    this.state = {
-      width: 0,
-    };
   }
 
   onDayPress() {
@@ -39,18 +36,9 @@ class Day extends Component {
     this.props.onLongPress(this.props.date);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      shouldUpdate(this.props, nextProps, ['state', 'children', 'marking', 'onPress', 'onLongPress']) ||
-      this.state.width !== nextState.width
-    );
+  shouldComponentUpdate(nextProps) {
+    return shouldUpdate(this.props, nextProps, ['state', 'children', 'marking', 'onPress', 'onLongPress']);
   }
-
-  handleLayout = (e) => {
-    this.setState({
-      width: e.nativeEvent.layout.width,
-    });
-  };
 
   render() {
     let containerStyle = [this.style.base];
@@ -88,23 +76,8 @@ class Day extends Component {
       }
     }
 
-    const expandableBackground = this.props.theme['stylesheet.calendar.expandable-background-color'];
-    const {startingDay, endingDay, disabled} = this.props.marking;
-
     return (
       <View>
-        {!disabled && (startingDay || endingDay) && !(startingDay && endingDay) && expandableBackground && (
-          <View
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: startingDay ? this.state.width / 2 + 5 : 0,
-              right: endingDay ? this.state.width / 2 + 5 : 0,
-              bottom: 0,
-              backgroundColor: expandableBackground,
-            }}
-          />
-        )}
         <TouchableOpacity
           testID={this.props.testID}
           style={containerStyle}

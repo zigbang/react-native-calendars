@@ -111,13 +111,24 @@ class Calendar extends Component {
     this.style = styleConstructor(this.props.theme);
     this.state = {
       currentMonth: props.current ? parseDate(props.current) : XDate(),
+      dayWidth: 0,
     };
 
     this.updateMonth = this.updateMonth.bind(this);
     this.pressDay = this.pressDay.bind(this);
     this.longPressDay = this.longPressDay.bind(this);
-    this.shouldComponentUpdate = shouldComponentUpdate;
   }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const boundUpdater = shouldComponentUpdate.bind(this);
+    return boundUpdater(nextProps, nextState) || this.state.dayWidth !== nextState.dayWidth;
+  }
+
+  handleDayLayout = (e) => {
+    this.setState({
+      dayWidth: e.nativeEvent.layout.width,
+    });
+  };
 
   updateMonth(day, doNotTriggerListeners) {
     if (day.toString('yyyy MM') === this.state.currentMonth.toString('yyyy MM')) {
@@ -208,8 +219,31 @@ class Calendar extends Component {
     const dateAsObject = xdateToData(day);
     const accessibilityLabel = this.getAccessibilityLabel(state, day);
 
+    const marking = this.getDateMarking(day);
+    const {theme} = this.props;
+    let backgroundColor = 'transparent';
+    if (theme['stylesheet.calendar.expandable-background-color'] && marking.selected) {
+      if (!marking.startingDay && !marking.endingDay) {
+        backgroundColor = theme['stylesheet.calendar.expandable-background-color'];
+      }
+    }
+
     return (
-      <View style={{flex: 1, alignItems: 'center'}} key={id}>
+      <View style={{flex: 1, alignItems: 'center', backgroundColor}} key={id} onLayout={this.handleDayLayout}>
+        {(marking.startingDay || marking.endingDay) && (
+          <View
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: marking.startingDay ? this.state.dayWidth / 2 : 0,
+              bottom: 0,
+              right: marking.endingDay ? this.state.dayWidth / 2 : 0,
+              backgroundColor: theme['stylesheet.calendar.expandable-background-color']
+                ? theme['stylesheet.calendar.expandable-background-color']
+                : 'transparent',
+            }}
+          />
+        )}
         <DayComp
           testID={`${SELECT_DATE_SLOT}-${dateAsObject.dateString}`}
           state={state}
@@ -217,7 +251,7 @@ class Calendar extends Component {
           onPress={this.pressDay}
           onLongPress={this.longPressDay}
           date={dateAsObject}
-          marking={this.getDateMarking(day)}
+          marking={marking}
           accessibilityLabel={accessibilityLabel}
           disableAllTouchEventsForDisabledDays={this.props.disableAllTouchEventsForDisabledDays}
           markedDates={this.props.markedDates}
