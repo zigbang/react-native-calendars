@@ -1,18 +1,27 @@
 import {parseDate} from '../interface';
 
 export default function shouldComponentUpdate(nextProps, nextState) {
-  let shouldUpdate = (nextProps.selected || []).reduce((prev, next, i) => {
-    const currentSelected = (this.props.selected || [])[i];
-    if (!currentSelected || !next || parseDate(currentSelected).getTime() !== parseDate(next).getTime()) {
-      return {
-        update: true,
-        field: 'selected'
-      };
-    }
-    return prev;
-  }, {update: false});
+  let shouldUpdate = (nextProps.selected || []).reduce(
+    (prev, next, i) => {
+      const currentSelected = (this.props.selected || [])[i];
+      if (!currentSelected || !next || parseDate(currentSelected).getTime() !== parseDate(next).getTime()) {
+        return {
+          update: true,
+          field: 'selected'
+        };
+      }
+      return prev;
+    },
+    {update: false}
+  );
 
-  shouldUpdate = ['markedDates', 'hideExtraDays', 'displayLoadingIndicator'].reduce((prev, next) => {
+  shouldUpdate = [
+    'markedDates',
+    'hideExtraDays',
+    'displayLoadingIndicator',
+    'disableArrowLeft',
+    'disableArrowRight'
+  ].reduce((prev, next) => {
     if (!prev.update && nextProps[next] !== this.props[next]) {
       return {
         update: true,

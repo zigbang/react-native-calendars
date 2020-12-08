@@ -3,7 +3,7 @@ import * as defaultStyle from '../../../style';
 
 const STYLESHEET_ID = 'stylesheet.day.multiDot';
 
-export default function styleConstructor(theme={}) {
+export default function styleConstructor(theme = {}) {
   const appStyle = {...defaultStyle, ...theme};
   return StyleSheet.create({
     base: {
@@ -37,6 +37,9 @@ export default function styleConstructor(theme={}) {
     },
     disabledText: {
       color: appStyle.textDisabledColor
+    },
+    dotContainer: {
+      flexDirection: 'row'
     },
     dot: {
       width: 4,

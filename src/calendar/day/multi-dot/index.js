@@ -5,10 +5,9 @@ import PropTypes from 'prop-types';
 import {shouldUpdate} from '../../../component-updater';
 import styleConstructor from './style';
 
-
 class Day extends Component {
   static displayName = 'IGNORE';
-  
+
   static propTypes = {
     // TODO: disabled props should be removed
     state: PropTypes.oneOf(['disabled', 'today', '']),
@@ -46,11 +45,16 @@ class Day extends Component {
     const baseDotStyle = [this.style.dot, this.style.visibleDot];
     if (marking.dots && Array.isArray(marking.dots) && marking.dots.length > 0) {
       // Filter out dots so that we we process only those items which have key and color property
-      const validDots = marking.dots.filter(d => (d && d.color));
+      const validDots = marking.dots.filter(d => d && d.color);
       return validDots.map((dot, index) => {
         return (
-          <View key={dot.key ? dot.key : index} style={[baseDotStyle,
-            {backgroundColor: marking.selected && dot.selectedDotColor ? dot.selectedDotColor : dot.color}]}/>
+          <View
+            key={dot.key ? dot.key : index}
+            style={[
+              baseDotStyle,
+              {backgroundColor: marking.selected && dot.selectedDotColor ? dot.selectedDotColor : dot.color}
+            ]}
+          />
         );
       });
     }
@@ -76,7 +80,7 @@ class Day extends Component {
       containerStyle.push(this.style.today);
       textStyle.push(this.style.todayText);
     }
-    
+
     return (
       <TouchableOpacity
         testID={this.props.testID}
@@ -87,8 +91,10 @@ class Day extends Component {
         accessibilityRole={isDisabled ? undefined : 'button'}
         accessibilityLabel={this.props.accessibilityLabel}
       >
-        <Text allowFontScaling={false} style={textStyle}>{String(this.props.children)}</Text>
-        <View style={{flexDirection: 'row'}}>{dot}</View>
+        <Text allowFontScaling={false} style={textStyle}>
+          {String(this.props.children)}
+        </Text>
+        <View style={this.style.dotContainer}>{dot}</View>
       </TouchableOpacity>
     );
   }
