@@ -1,6 +1,6 @@
 {
   "name": "@zigbang/react-native-calendars",
-  "version": "1.403.14-alpha.0",
+  "version": "1.403.14-alpha.1",
   "main": "src/index.js",
   "types": "src/types/index.d.ts",
   "description": "React Native Calendar Components",
