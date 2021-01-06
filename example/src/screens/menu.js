@@ -26,6 +26,13 @@ export default class MenuScreen extends Component {
             <Text style={styles.menuText}>Calendar List</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            testID={testIDs.menu.ZIGBANG_HOME_CALENDAR_LIST}
+            style={styles.menu}
+            onPress={this.onZigbangHomeCalendarListPress.bind(this)}
+          >
+            <Text style={styles.menuText}>Zigbang Home Calendar List</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             testID={testIDs.menu.HORIZONTAL_LIST}
             style={styles.menu}
             onPress={this.onHorizontalCalendarListPress.bind(this)}
@@ -84,6 +91,10 @@ export default class MenuScreen extends Component {
 
   onCalendarListPress() {
     this.pushScreen('CalendarsList');
+  }
+
+  onZigbangHomeCalendarListPress() {
+    this.pushScreen('ZigbangHomeCalendarsList');
   }
 
   onHorizontalCalendarListPress() {

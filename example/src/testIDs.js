@@ -3,6 +3,7 @@ module.exports = {
     CONTAINER: 'menu',
     CALENDARS: 'calendars_btn',
     CALENDAR_LIST: 'calendar_list_btn',
+    ZIGBANG_HOME_CALENDAR_LIST: 'zigbang_home_calendar_list_btn',
     HORIZONTAL_LIST: 'horizontal_list_btn',
     AGENDA: 'agenda_btn',
     EXPANDABLE_CALENDAR: 'expandable_calendar_btn',

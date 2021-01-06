@@ -64,7 +64,6 @@ export interface CalendarTheme {
     "stylesheet.day.single"?: CalendarThemeIdStyle;
     "stylesheet.day.multiDot"?: CalendarThemeIdStyle;
     "stylesheet.day.period"?: CalendarThemeIdStyle;
-    "stylesheet.calendar.expandable-background-color"?: string;
 }
 
 export type DateCallbackHandler = (date: DateObject) => void;
@@ -164,12 +163,20 @@ export interface PeriodMarkingProps {
     };
 }
 
+export interface ZigbangHomeMarkingProps {
+    markingType: 'zigbangHome';
+    markedDates: {
+        [date: string]: PeriodMarking;
+    };
+}
+
 export type CalendarMarkingProps =
     MultiDotMarkingProps |
     DotMarkingProps |
     PeriodMarkingProps |
     MultiPeriodMarkingProps |
     CustomMarkingProps |
+    ZigbangHomeMarkingProps |
     {};
 
 export interface DayComponentProps {
