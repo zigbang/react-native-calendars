@@ -119,6 +119,13 @@ export interface PeriodMarking {
     disabled?: boolean;
 }
 
+export interface ZigbangHomeMarking {
+    startingDay?: boolean;
+    selected: boolean;
+    endingDay?: boolean;
+    disabled?: boolean;
+}
+
 export type Marking =
     CustomMarking | DotMarking |
     MultiDotMarking | MultiPeriodMarking |
@@ -166,7 +173,7 @@ export interface PeriodMarkingProps {
 export interface ZigbangHomeMarkingProps {
     markingType: 'zigbangHome';
     markedDates: {
-        [date: string]: PeriodMarking;
+        [date: string]: ZigbangHomeMarking;
     };
 }
 
