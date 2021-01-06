@@ -307,6 +307,7 @@ class Calendar extends Component {
     const {theme} = this.props;
     let backgroundColor = 'transparent';
     if (
+      theme &&
       theme['stylesheet.calendar.expandable-background-color'] &&
       marking.selected &&
       !marking.startingDay &&
@@ -325,9 +326,10 @@ class Calendar extends Component {
               left: marking.startingDay ? this.state.dayWidth / 2 : 0,
               bottom: 0,
               right: marking.endingDay ? this.state.dayWidth / 2 : 0,
-              backgroundColor: theme['stylesheet.calendar.expandable-background-color']
-                ? theme['stylesheet.calendar.expandable-background-color']
-                : 'transparent'
+              backgroundColor:
+                theme && theme['stylesheet.calendar.expandable-background-color']
+                  ? theme['stylesheet.calendar.expandable-background-color']
+                  : 'transparent'
             }}
           />
         )}
