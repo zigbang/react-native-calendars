@@ -2,7 +2,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import React, {useState, Fragment} from 'react';
 import {StyleSheet, View, ScrollView, Text, TouchableOpacity} from 'react-native';
-import {Calendar} from 'react-native-calendars';
+import {Calendar} from '@zigbang/react-native-calendars';
 
 const testIDs = require('../testIDs');
 

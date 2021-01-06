@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, View} from 'react-native';
-import {CalendarList} from 'react-native-calendars';
+import {CalendarList} from '@zigbang/react-native-calendars';
 
 const testIDs = require('../testIDs');
 

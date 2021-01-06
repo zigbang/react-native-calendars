@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, {Component} from 'react';
 import {Platform, Alert, StyleSheet, View, Text, TouchableOpacity, Button} from 'react-native';
-import {ExpandableCalendar, AgendaList, CalendarProvider, WeekCalendar} from 'react-native-calendars';
+import {ExpandableCalendar, AgendaList, CalendarProvider, WeekCalendar} from '@zigbang/react-native-calendars';
 
 const testIDs = require('../testIDs');
 
