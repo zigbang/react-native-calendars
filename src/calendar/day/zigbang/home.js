@@ -102,7 +102,7 @@ class ZigbangHomeDay extends Component {
           <Text allowFontScaling={false} style={textStyle}>
             {String(this.props.children)}
           </Text>
-          {this.props.state === 'today' && <Text style={{fontSize: 10, marginTop: 5}}>오늘</Text>}
+          {/* 이곳에 "오늘" 표시를 하면된다 */}
         </TouchableOpacity>
       </View>
     );
