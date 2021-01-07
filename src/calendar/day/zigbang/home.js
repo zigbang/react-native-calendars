@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import {TouchableOpacity, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 
-import styleConstructor from './style';
+import styleConstructor, {circledStyles, highlightedStyles, disabledStyles} from './style';
 import {shouldUpdate} from '../../../component-updater';
 
-class Day extends Component {
+class ZigbangHomeDay extends Component {
   static displayName = 'IGNORE';
 
   static propTypes = {
@@ -56,8 +56,19 @@ class Day extends Component {
     if (marking.selected) {
       containerStyle.push(this.style.selected);
       textStyle.push(this.style.selectedText);
+      const shouldApplyCircledStyles = marking.startingDay || marking.endingDay;
+      const shouldApplyHighlightedStyles = !marking.startingDay && !marking.endingDay && !marking.disabled;
+      if (shouldApplyCircledStyles) {
+        containerStyle.push(circledStyles.container);
+        textStyle.push(circledStyles.text);
+      } else if (shouldApplyHighlightedStyles) {
+        containerStyle.push(highlightedStyles.container);
+        textStyle.push(highlightedStyles.text);
+      }
     } else if (isDisabled) {
+      containerStyle.push(disabledStyles.container);
       textStyle.push(this.style.disabledText);
+      textStyle.push(disabledStyles.text);
     } else if (this.props.state === 'today') {
       containerStyle.push(this.style.today);
       textStyle.push(this.style.todayText);
@@ -91,17 +102,11 @@ class Day extends Component {
           <Text allowFontScaling={false} style={textStyle}>
             {String(this.props.children)}
           </Text>
-          {/* {
-            this.props.state === 'today' && (
-              <Text style={{ fontSize: 10, marginTop: 5 }}>
-                오늘
-              </Text>
-            )
-          } */}
+          {/* 이곳에 "오늘" 표시를 하면된다 */}
         </TouchableOpacity>
       </View>
     );
   }
 }
 
-export default Day;
+export default ZigbangHomeDay;

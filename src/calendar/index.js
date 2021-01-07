@@ -9,13 +9,14 @@ import {xdateToData, parseDate} from '../interface';
 import shouldComponentUpdate from './updater';
 import {extractComponentProps} from '../component-updater';
 import {SELECT_DATE_SLOT, WEEK_NUMBER} from '../testIDs';
-import styleConstructor from './style';
+import styleConstructor, {ZigbangColor} from './style';
 import CalendarHeader from './header';
 import Day from './day/basic';
 import PeriodDay from './day/period';
 import MultiDotDay from './day/multi-dot';
 import MultiPeriodDay from './day/multi-period';
 import CustomDay from './day/custom';
+import {ZigbangHomeDay} from './day/zigbang';
 
 //Fallback for react-native-web or when RN version is < 0.44
 const {View, ViewPropTypes} = ReactNative;
@@ -219,6 +220,8 @@ class Calendar extends Component {
         return MultiPeriodDay;
       case 'custom':
         return CustomDay;
+      case 'zigbangHome':
+        return ZigbangHomeDay;
       default:
         return Day;
     }
@@ -304,20 +307,23 @@ class Calendar extends Component {
     const accessibilityLabel = this.getAccessibilityLabel(state, day);
 
     const marking = this.getDateMarking(day);
-    const {theme} = this.props;
-    let backgroundColor = 'transparent';
-    if (
-      theme &&
-      theme['stylesheet.calendar.expandable-background-color'] &&
-      marking.selected &&
-      !marking.startingDay &&
-      !marking.endingDay
-    ) {
-      backgroundColor = theme['stylesheet.calendar.expandable-background-color'];
+    const {markingType} = this.props;
+    const backgroundColors = {
+      wrapper: 'transparent',
+      staringOrEndingDay: 'transparent'
+    };
+    if (markingType === 'zigbangHome') {
+      backgroundColors.staringOrEndingDay = ZigbangColor.yellow3;
+      if (marking.selected && !marking.startingDay && !marking.endingDay) {
+        backgroundColors.wrapper = ZigbangColor.yellow3;
+      }
     }
-
     return (
-      <View style={{flex: 1, alignItems: 'center', backgroundColor}} key={id} onLayout={this.handleDayLayout}>
+      <View
+        style={{flex: 1, alignItems: 'center', backgroundColor: backgroundColors.wrapper}}
+        key={id}
+        onLayout={this.handleDayLayout}
+      >
         {!marking.disabled && (marking.startingDay || marking.endingDay) && (
           <View
             style={{
@@ -326,10 +332,7 @@ class Calendar extends Component {
               left: marking.startingDay ? this.state.dayWidth / 2 : 0,
               bottom: 0,
               right: marking.endingDay ? this.state.dayWidth / 2 : 0,
-              backgroundColor:
-                theme && theme['stylesheet.calendar.expandable-background-color']
-                  ? theme['stylesheet.calendar.expandable-background-color']
-                  : 'transparent'
+              backgroundColor: backgroundColors.staringOrEndingDay
             }}
           />
         )}
