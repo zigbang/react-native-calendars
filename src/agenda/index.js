@@ -46,10 +46,11 @@ export default class AgendaView extends Component {
     /** callback that gets called on day press */
     onDayPress: PropTypes.func,
     /** callback that gets called when day changes while scrolling agenda list */
-    onDaychange: PropTypes.func,
+    onDaychange: PropTypes.func, //TODO: Should be renamed 'onDayChange'
     /** specify how agenda knob should look like */
-    renderKnob: PropTypes.func, //TODO: Should be renamed 'selectedDay'
-    /** initially selected day */ selected: PropTypes.any,
+    renderKnob: PropTypes.func,
+    /** initially selected day */
+    selected: PropTypes.any, //TODO: Should be renamed 'selectedDay'
     /** Hide knob button. Default = false */
     hideKnob: PropTypes.bool
   };
@@ -283,11 +284,11 @@ export default class AgendaView extends Component {
   };
 
   renderReservations() {
-    const reservationListUserProps = extractComponentProps(ReservationList, this.props);
+    const reservationListProps = extractComponentProps(ReservationList, this.props);
 
     return (
       <ReservationList
-        {...reservationListUserProps}
+        {...reservationListProps}
         ref={c => (this.list = c)}
         reservations={this.props.items}
         selectedDay={this.state.selectedDay}
@@ -300,11 +301,11 @@ export default class AgendaView extends Component {
 
   renderCalendarList() {
     const shouldHideExtraDays = this.state.calendarScrollable ? this.props.hideExtraDays : false;
-    const calendarListUserProps = extractComponentProps(CalendarList, this.props);
+    const calendarListProps = extractComponentProps(CalendarList, this.props);
 
     return (
       <CalendarList
-        {...calendarListUserProps}
+        {...calendarListProps}
         ref={c => (this.calendar = c)}
         current={this.currentMonth}
         markedDates={this.generateMarkings()}

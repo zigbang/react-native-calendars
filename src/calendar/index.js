@@ -8,15 +8,12 @@ import dateutils from '../dateutils';
 import {xdateToData, parseDate} from '../interface';
 import shouldComponentUpdate from './updater';
 import {extractComponentProps} from '../component-updater';
-import {SELECT_DATE_SLOT, WEEK_NUMBER} from '../testIDs';
+import {WEEK_NUMBER} from '../testIDs';
 import styleConstructor, {ZigbangColor} from './style';
 import CalendarHeader from './header';
-import Day from './day/basic';
-import PeriodDay from './day/period';
-import MultiDotDay from './day/multi-dot';
-import MultiPeriodDay from './day/multi-period';
-import CustomDay from './day/custom';
 import {ZigbangHomeDay} from './day/zigbang';
+import BasicDay from './day/basic';
+import Day from './day/index';
 
 //Fallback for react-native-web or when RN version is < 0.44
 const {View, ViewPropTypes} = ReactNative;
@@ -34,6 +31,7 @@ class Calendar extends Component {
 
   static propTypes = {
     ...CalendarHeader.propTypes,
+    ...Day.propTypes,
     /** Specify theme properties to override specific styles for calendar parts. Default = {} */
     theme: PropTypes.object,
     /** Specify style for calendar container element. Default = {} */
@@ -48,8 +46,6 @@ class Calendar extends Component {
     firstDay: PropTypes.number,
     /** Collection of dates that have to be marked. Default = {} */
     markedDates: PropTypes.object,
-    /** Date marking style [simple/period/multi-dot/multi-period]. Default = 'simple' */
-    markingType: PropTypes.string,
     /** Display loading indicator. Default = false */
     displayLoadingIndicator: PropTypes.bool,
     /** Show week numbers. Default = false */
@@ -66,16 +62,12 @@ class Calendar extends Component {
     onMonthChange: PropTypes.func,
     /** Handler which gets executed when visible month changes in calendar. Default = undefined */
     onVisibleMonthsChange: PropTypes.func,
-    /** Provide custom day rendering component */
-    dayComponent: PropTypes.any,
     /** Disables changing month when click on days of other months (when hideExtraDays is false). Default = false */
     disableMonthChange: PropTypes.bool,
     /** Enable the option to swipe between months. Default: false */
     enableSwipeMonths: PropTypes.bool,
     /** Disable days by default. Default = false */
     disabledByDefault: PropTypes.bool,
-    /** Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates*/
-    disableAllTouchEventsForDisabledDays: PropTypes.bool,
     /** Style passed to the header */
     headerStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number, PropTypes.array]),
     /** Allow rendering of a totally custom header */
@@ -102,6 +94,10 @@ class Calendar extends Component {
     const shouldUpdate = boundUpdater(nextProps, nextState) || this.state.dayWidth !== nextState.dayWidth;
     return shouldUpdate;
   }
+
+  addMonth = count => {
+    this.updateMonth(this.state.currentMonth.clone().addMonths(count, true));
+  };
 
   handleDayLayout = e => {
     this.setState({
@@ -207,23 +203,12 @@ class Calendar extends Component {
   getDayComponent() {
     const {dayComponent, markingType} = this.props;
 
-    if (dayComponent) {
-      return dayComponent;
+    if (markingType === 'zigbangHome') {
+      return ZigbangHomeDay;
     }
 
-    switch (markingType) {
-      case 'period':
-        return PeriodDay;
-      case 'multi-dot':
-        return MultiDotDay;
-      case 'multi-period':
-        return MultiPeriodDay;
-      case 'custom':
-        return CustomDay;
-      case 'zigbangHome':
-        return ZigbangHomeDay;
-      default:
-        return Day;
+    if (dayComponent) {
+      return dayComponent;
     }
   }
 
@@ -241,6 +226,24 @@ class Calendar extends Component {
     } else {
       return false;
     }
+  }
+
+  getState(day) {
+    const {disabledByDefault} = this.props;
+    const minDate = parseDate(this.props.minDate);
+    const maxDate = parseDate(this.props.maxDate);
+    let state = '';
+
+    if (disabledByDefault) {
+      state = 'disabled';
+    } else if (dateutils.isDateNotInTheRange(minDate, maxDate, day)) {
+      state = 'disabled';
+    } else if (!dateutils.sameMonth(day, this.state.currentMonth)) {
+      state = 'disabled';
+    } else if (dateutils.sameDate(day, XDate())) {
+      state = 'today';
+    }
+    return state;
   }
 
   onSwipe = gestureName => {
@@ -270,7 +273,7 @@ class Calendar extends Component {
   renderWeekNumber(weekNumber) {
     return (
       <View style={this.style.dayContainer} key={`week-container-${weekNumber}`}>
-        <Day
+        <BasicDay
           key={`week-${weekNumber}`}
           marking={{disableTouchEvent: true}}
           state="disabled"
@@ -278,34 +281,16 @@ class Calendar extends Component {
           testID={`${WEEK_NUMBER}-${weekNumber}`}
         >
           {weekNumber}
-        </Day>
+        </BasicDay>
       </View>
     );
   }
 
   renderDay(day, id) {
-    const minDate = parseDate(this.props.minDate);
-    const maxDate = parseDate(this.props.maxDate);
-    let state = '';
-    if (this.props.disabledByDefault) {
-      state = 'disabled';
-    } else if (this.isDateNotInTheRange(minDate, maxDate, day)) {
-      state = 'disabled';
-    } else if (!dateutils.sameMonth(day, this.state.currentMonth)) {
-      state = 'disabled';
-    } else if (dateutils.sameDate(day, XDate())) {
-      state = 'today';
-    }
-
+    const dayProps = extractComponentProps(Day, this.props);
     if (!dateutils.sameMonth(day, this.state.currentMonth) && this.props.hideExtraDays) {
       return <View key={id} style={{flex: 1}} />;
     }
-
-    const DayComp = this.getDayComponent();
-    const date = day.getDate();
-    const dateAsObject = xdateToData(day);
-    const accessibilityLabel = this.getAccessibilityLabel(state, day);
-
     const marking = this.getDateMarking(day);
     const {markingType} = this.props;
     const backgroundColors = {
@@ -320,7 +305,7 @@ class Calendar extends Component {
     }
     return (
       <View
-        style={{flex: 1, alignItems: 'center', backgroundColor: backgroundColors.wrapper}}
+        style={{...this.style.dayContainer, backgroundColor: backgroundColors.wrapper}}
         key={id}
         onLayout={this.handleDayLayout}
       >
@@ -336,20 +321,15 @@ class Calendar extends Component {
             }}
           />
         )}
-        <DayComp
-          testID={`${SELECT_DATE_SLOT}-${dateAsObject.dateString}`}
-          state={state}
-          theme={this.props.theme}
+        <Day
+          {...dayProps}
+          dayComponent={this.getDayComponent()}
+          day={day}
+          state={this.getState(day)}
+          marking={this.getDateMarking(day)}
           onPress={this.pressDay}
           onLongPress={this.longPressDay}
-          date={dateAsObject}
-          marking={marking}
-          accessibilityLabel={accessibilityLabel}
-          disableAllTouchEventsForDisabledDays={this.props.disableAllTouchEventsForDisabledDays}
-          markedDates={this.props.markedDates}
-        >
-          {date}
-        </DayComp>
+        />
       </View>
     );
   }
@@ -398,10 +378,10 @@ class Calendar extends Component {
       }
     }
 
-    const headerUserProps = extractComponentProps(CalendarHeader, this.props);
+    const headerProps = extractComponentProps(CalendarHeader, this.props);
 
-    const headerProps = {
-      ...headerUserProps,
+    const props = {
+      ...headerProps,
       testID: testID,
       style: headerStyle,
       ref: c => (this.header = c),
@@ -413,7 +393,7 @@ class Calendar extends Component {
     const CustomHeader = customHeader;
     const HeaderComponent = customHeader ? CustomHeader : CalendarHeader;
 
-    return <HeaderComponent {...headerProps} />;
+    return <HeaderComponent {...props} />;
   }
 
   render() {
