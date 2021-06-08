@@ -34,6 +34,12 @@ export default function styleConstructor(theme = {}) {
     todayText: {
       color: appStyle.todayTextColor
     },
+    saturdayText: {
+      color: appStyle.saturdayTextColor
+    },
+    sundayText: {
+      color: appStyle.sundayTextColor
+    },
     selectedText: {
       color: appStyle.selectedDayTextColor
     },

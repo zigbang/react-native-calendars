@@ -16,6 +16,16 @@ function sameDate(a, b) {
   );
 }
 
+/** 날짜가 토요일 인지 확인하는 함수*/
+function isSaturday(a) {
+  return a instanceof XDate && a.getDay() === 6;
+}
+
+/** 날짜가 일요일 인지 확인하는 함수*/
+function isSunday(a) {
+  return a instanceof XDate && a.getDay() === 0;
+}
+
 function isGTE(a, b) {
   return b.diffDays(a) > -1;
 }
@@ -102,6 +112,8 @@ module.exports = {
   weekDayNames,
   sameMonth,
   sameDate,
+  isSaturday,
+  isSunday,
   month,
   page,
   fromTo,
