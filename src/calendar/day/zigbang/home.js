@@ -64,6 +64,11 @@ class ZigbangHomeDay extends Component {
       } else if (shouldApplyHighlightedStyles) {
         containerStyle.push(highlightedStyles.container);
         textStyle.push(highlightedStyles.text);
+        if (this.props.state === 'saturday') {
+          textStyle.push(this.style.saturdayText);
+        } else if (this.props.state === 'sunday') {
+          textStyle.push(this.style.sundayText);
+        }
       }
     } else if (isDisabled) {
       containerStyle.push(disabledStyles.container);
