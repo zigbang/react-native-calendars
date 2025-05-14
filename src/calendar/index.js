@@ -14,9 +14,10 @@ import CalendarHeader from './header';
 import {ZigbangHomeDay} from './day/zigbang';
 import BasicDay from './day/basic';
 import Day from './day/index';
+import {ViewPropTypes} from 'deprecated-react-native-prop-types';
 
 //Fallback for react-native-web or when RN version is < 0.44
-const {View, ViewPropTypes} = ReactNative;
+const {View} = ReactNative;
 const viewPropTypes =
   typeof document !== 'undefined' ? PropTypes.shape({style: PropTypes.object}) : ViewPropTypes || View.propTypes;
 const EmptyArray = [];

@@ -11,12 +11,13 @@ import {VelocityTracker} from '../input';
 import styleConstructor from './style';
 import CalendarList from '../calendar-list';
 import ReservationList from './reservation-list';
+import {ViewPropTypes} from 'deprecated-react-native-prop-types';
 
 const HEADER_HEIGHT = 104;
 const KNOB_HEIGHT = 24;
 
 //Fallback for react-native-web or when RN version is < 0.44
-const {Text, View, Dimensions, Animated, ViewPropTypes} = ReactNative;
+const {Text, View, Dimensions, Animated} = ReactNative;
 const viewPropTypes =
   typeof document !== 'undefined' ? PropTypes.shape({style: PropTypes.object}) : ViewPropTypes || View.propTypes;
 

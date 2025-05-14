@@ -28,13 +28,14 @@
   "author": "zigbang",
   "license": "MIT",
   "dependencies": {
+    "deprecated-react-native-prop-types": "^5.0.0",
+    "hoist-non-react-statics": "^3.3.1",
+    "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
-    "hoist-non-react-statics": "^3.3.1",
-    "react-native-swipe-gestures": "^1.0.5",
     "prop-types": "^15.5.10",
-    "xdate": "^0.8.0",
-    "immutable": "^4.0.0-rc.12"
+    "react-native-swipe-gestures": "^1.0.5",
+    "xdate": "^0.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
